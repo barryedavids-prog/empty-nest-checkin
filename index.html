@@ -519,6 +519,18 @@
       anxious: "Distance can stir up worry for you.",
       avoidant: "You may protect yourself by pulling back."
     }[answers.attachment];
+    var grief = {
+      sadness: "You're feeling sad, even though you knew it was coming.",
+      guilt: "You're noticing some guilt alongside the relief.",
+      longing: "You're missing the everyday routine you used to share.",
+      numb: "You're feeling a bit numb as you take in the change."
+    }[answers.grief];
+    var close = {
+      daily: "You like regular contact to keep your connection going.",
+      detail: "You still like to know how things are going for them.",
+      background: "You're giving them space while being there when they need you.",
+      rhythm: "You're still finding your rhythm as a family."
+    }[answers.close];
     var room = (answers.self || []).filter(function (x) { return x !== "I don't know yet"; });
     var roomText = room.length ? "You'd like to make room for: " + room.join(", ").toLowerCase() + "." : "You're still discovering what comes next, and that's fine.";
 
