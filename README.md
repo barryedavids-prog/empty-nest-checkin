@@ -1,6 +1,6 @@
 # Empty Nest Check-in
 
-A short interactive check-in for parents whose children have left home, from Liane Davids Counselling. It links readers to the blog post [What happens once all your children have left home?](https://www.lianedavidscounselling.co.uk/blog/what-happens-once-all-your-children-have-left-home).
+A short interactive check-in for parents whose children have left home, from Liane Davids Counselling. It links readers to the blog post [What happens when your children leave home?](https://www.lianedavidscounselling.co.uk/blog/what-happens-when-your-children-leave-home).
 
 Hosted with GitHub Pages and embedded on the website in an iframe:
 

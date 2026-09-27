@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>What happens once all your children have left home?</title>
+<title>What happens when your children leave home?</title>
 <meta name="description" content="A short, gentle check-in for parents whose children have left home, from Liane Davids Counselling.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -198,9 +198,9 @@
 <script>
 (function () {
   // Settings: edit these links if the site changes
-  var BLOG = "https://www.lianedavidscounselling.co.uk/blog/what-happens-once-all-your-children-have-left-home";
+  var BLOG = "https://www.lianedavidscounselling.co.uk/blog/what-happens-when-your-children-leave-home";
   var CONTACT = "https://www.lianedavidscounselling.co.uk/home#contact";
-  var HERO = "https://static1.squarespace.com/static/69d0e25c6c619b200232f381/6a664adecf427d5cd2120fc4/6ab919d4829ce85d85d9e41b/1790516078610/empty+nest.jpg?format=1000w";
+  var HERO = "https://static1.squarespace.com/static/69d0e25c6c619b200232f381/6a664adecf427d5cd2120fc4/6ab919d4829ce85d85d9e41b/1790530083746/empty+nest.jpg?format=1000w";
   var UTM = "utm_source=empty-nest-checkin&utm_medium=interactive&utm_campaign=empty-nest";
 
   // Links jump to a section of the blog using a text fragment (works in Chrome, Edge and Safari;
@@ -408,7 +408,7 @@
     c.innerHTML =
       '<img class="hero-img" src="' + HERO + '" alt="" onerror="this.remove()">' +
       '<p class="eyebrow">A 2-minute check-in</p>' +
-      '<h1>What happens once all your children have left home?</h1>' +
+      '<h1>What happens when your children leave home?</h1>' +
       '<p>When the children leave home, parents often feel heartbroken, relieved or a confusing mix of both.</p>' +
       '<p class="muted">Answer five quick questions to see what might be going on for you. Each answer links to the part of our blog that explores it further.</p>' +
       '<div class="actions">' +
@@ -555,7 +555,7 @@
   function share() {
     // Shares the blog itself, so it works however the check-in page is embedded.
     var url = BLOG + "?utm_source=empty-nest-checkin&utm_medium=share&utm_campaign=empty-nest";
-    var data = { title: "What happens once all your children have left home?", text: "I found this helpful. It might be for you too.", url: url };
+    var data = { title: "What happens when your children leave home?", text: "I found this helpful. It might be for you too.", url: url };
     track("share_click");
     if (navigator.share) { navigator.share(data).catch(function () {}); return; }
     var done = function () { toast("Link copied"); };
