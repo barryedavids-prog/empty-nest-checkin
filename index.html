@@ -329,16 +329,35 @@
     {
       id: "close",
       eyebrow: "Question 4 of 5",
-      title: "Which of these best describes staying close to an adult child?",
+      title: "How would you describe staying in touch with your children now?",
       options: [
-        { key: "daily", emoji: "📞", label: "Checking in every day" },
-        { key: "detail", emoji: "🔍", label: "Knowing what's going on in their life" },
-        { key: "background", emoji: "🏡", label: "Being a steady presence they know they can come to" }
+        { key: "daily", emoji: "📞", label: "I like to check in most days." },
+        { key: "detail", emoji: "🔍", label: "I like to know what's going on in their lives." },
+        { key: "background", emoji: "🏡", label: "I let them come to me when they need me." },
+        { key: "rhythm", emoji: "🌀", label: "We're still finding our rhythm." }
       ],
       reveal: function (k) {
+        var map = {
+          daily: {
+            title: "Wanting regular contact shows how much you care.",
+            body: "After years of being part of their every day, it's natural to want to keep that connection going. Many parents find the right amount of contact shifts over time, for both of you."
+          },
+          detail: {
+            title: "It's hard to switch off years of looking out for them.",
+            body: "You've spent so long caring, guiding and keeping them safe that wanting to know how they are is instinctive. Part of this stage is learning to step back a little, even when their choices aren't the ones you'd make."
+          },
+          background: {
+            title: "Giving them space can be a quiet act of love.",
+            body: "Being a steady, reassuring presence in the background lets them grow while knowing you're there. For some parents this comes naturally, and for others it takes time."
+          },
+          rhythm: {
+            title: "Every family finds its own balance.",
+            body: "Working out how close to be, and how much space to give, is one of the biggest challenges of this stage. It's okay for that to take a while to settle."
+          }
+        }[k];
         return {
-          title: k === "background" ? "Exactly. That's the balance the blog describes." : "It's a very natural instinct, but closeness can look different now.",
-          body: "After years of caring, guiding and keeping them safe, it's natural to want to stay involved. Part of this stage is learning to step back a little, even when their choices aren't the ones you'd make.",
+          title: map.title,
+          body: map.body + " Staying close isn't about how often you talk. It's about them knowing they can come to you for support, advice or simply a familiar voice.",
           quote: "You’re still their safe base, just in a different way than before.",
           link: blogLink("q4-close", "Staying close while letting go"),
           linkText: "Read “Staying close while letting go”"
