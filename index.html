@@ -291,15 +291,35 @@
     {
       id: "grief",
       eyebrow: "Question 3 of 5",
-      title: "True or false? If you were looking forward to this stage, you shouldn't feel sad about it.",
+      title: "Since your children left, which of these have you noticed most?",
       options: [
-        { key: "true", emoji: "✅", label: "True" },
-        { key: "false", emoji: "❌", label: "False" }
+        { key: "sadness", emoji: "😢", label: "Sadness, even though I knew it was coming." },
+        { key: "guilt", emoji: "😔", label: "Guilt for enjoying the peace and quiet." },
+        { key: "longing", emoji: "🕰️", label: "Missing the everyday routine we used to have." },
+        { key: "numb", emoji: "😶", label: "Not much at all. I feel a bit numb." }
       ],
       reveal: function (k) {
+        var map = {
+          sadness: {
+            title: "Knowing it was coming doesn't stop it hurting.",
+            body: "Even parents who were looking forward to this moment can feel shaken by the quiet, the space or the sudden change in routine."
+          },
+          guilt: {
+            title: "Guilt often shows up alongside relief.",
+            body: "Enjoying the extra space doesn't mean you love your children any less. Feeling two things at once is a very normal part of adjusting."
+          },
+          longing: {
+            title: "Routines hold so much of family life.",
+            body: "When the daily rhythm of caring for someone suddenly changes, it's natural to feel its absence, even in the small, ordinary moments."
+          },
+          numb: {
+            title: "Numbness can be part of grief too.",
+            body: "Sometimes feelings take a while to surface, or arrive quietly. Feeling flat or disconnected can be the mind's way of taking in a big change."
+          }
+        }[k];
         return {
-          title: k === "false" ? "You're right, it's false." : "It's actually false, and that surprises a lot of people.",
-          body: "Even parents who were looking forward to this moment can feel shaken by the quiet, the space or the sudden change in routine. Sadness, guilt, anger, numbness and longing are all common.",
+          title: map.title,
+          body: map.body + " Sadness, guilt, anger, numbness and longing are all common, and like any big life transition, it takes time to adjust.",
           quote: "It’s a kind of grief, not because the relationship ends, but because it changes.",
           link: blogLink("q3-grief", "Why it can feel like grief"),
           linkText: "Read why it can feel like grief"
