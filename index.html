@@ -7,6 +7,10 @@
 <meta name="description" content="A short, gentle check-in for parents whose children have left home, from Liane Davids Counselling.">
 <!-- Keep this GitHub address out of search results, but let Google count the content where it is embedded on the website -->
 <meta name="googlebot" content="noindex, indexifembedded">
+<!-- GoatCounter stats: https://barrydavids.goatcounter.com -->
+<script data-goatcounter="https://barrydavids.goatcounter.com/count"
+        data-goatcounter-settings='{"allow_frame": true, "path": "/empty-nest-checkin"}'
+        async src="https://gc.zgo.at/count.js"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&display=swap" rel="stylesheet">
@@ -382,10 +386,37 @@
   }
   function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); }
 
+  function slug(s) { return String(s).toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, ""); }
+
+  function goat(path, title) {
+    // Records a GoatCounter event; they appear on the dashboard as "empty-nest/...".
+    try {
+      if (window.goatcounter && typeof window.goatcounter.count === "function") {
+        window.goatcounter.count({ path: "empty-nest/" + path, title: title, event: true });
+      }
+    } catch (e) {}
+  }
+
   function track(name, data) {
+    data = data || {};
     // Sends an event to the parent page (e.g. for analytics) and to Google Analytics if present.
-    try { window.parent && window.parent !== window && window.parent.postMessage({ source: "empty-nest-checkin", event: name, data: data || {} }, "*"); } catch (e) {}
-    try { if (typeof window.gtag === "function") window.gtag("event", name, data || {}); } catch (e) {}
+    try { window.parent && window.parent !== window && window.parent.postMessage({ source: "empty-nest-checkin", event: name, data: data }, "*"); } catch (e) {}
+    try { if (typeof window.gtag === "function") window.gtag("event", name, data); } catch (e) {}
+
+    // GoatCounter: numbered steps show how far people get; answer events show what they chose.
+    if (name === "checkin_start") goat("1-started", "Started the check-in");
+    if (name === "checkin_answer") {
+      var n = steps.map(function (x) { return x.id; }).indexOf(data.question) + 1;
+      goat((n + 1) + "-answered-q" + n, "Answered question " + n);
+      var picks = [].concat(data.answer);
+      if (!picks.length) picks = ["none"];
+      picks.forEach(function (a) { goat("answer/q" + n + "-" + data.question + "/" + slug(a), "Q" + n + " answer: " + a); });
+    }
+    if (name === "checkin_complete") goat("7-completed", "Reached the summary");
+    if (name === "blog_click") goat("blog-click/" + slug(data.from), "Clicked through to the blog from " + data.from);
+    if (name === "contact_click") goat("contact-click", "Clicked get in touch");
+    if (name === "share_click") goat("share-click", "Clicked share");
+    if (name === "restart") goat("restart", "Started again");
   }
 
   function setProgress(i) {
@@ -422,14 +453,14 @@
     c.querySelector("a.btn-text").addEventListener("click", function () { track("blog_click", { from: "intro" }); });
   }
 
-  function revealBox(r) {
+  function revealBox(r, from) {
     var box = el("div", { "class": "reveal" });
     box.innerHTML =
       "<h3>" + esc(r.title) + "</h3>" +
       "<p>" + esc(r.body) + "</p>" +
       (r.quote ? "<blockquote>“" + esc(r.quote.replace(/^[“"]|[”"]$/g, "")) + "”</blockquote>" : "") +
       '<a class="read-link" href="' + r.link + '" target="_top">' + esc(r.linkText) + ' <span aria-hidden="true">→</span></a>';
-    box.querySelector("a").addEventListener("click", function () { track("blog_click", { from: r.linkText }); });
+    box.querySelector("a").addEventListener("click", function () { track("blog_click", { from: from }); });
     return box;
   }
 
@@ -467,10 +498,10 @@
       c.appendChild(done);
       done.addEventListener("click", function () {
         answers[s.id] = picked.slice();
-        track("checkin_answer", { question: s.id, answer: picked.join(", ") });
+        track("checkin_answer", { question: s.id, answer: picked.slice() });
         chips.querySelectorAll(".chip").forEach(function (x) { x.disabled = true; });
         done.remove();
-        c.appendChild(revealBox(s.reveal(picked)));
+        c.appendChild(revealBox(s.reveal(picked), s.id));
         c.appendChild(nextButton(i));
       });
     } else {
@@ -484,7 +515,7 @@
           opts.querySelectorAll(".opt").forEach(function (x) { x.disabled = true; });
           b.classList.add("chosen");
           b.setAttribute("aria-pressed", "true");
-          var r = revealBox(s.reveal(o.key));
+          var r = revealBox(s.reveal(o.key), s.id);
           c.appendChild(r);
           c.appendChild(nextButton(i));
           setTimeout(function () { try { r.scrollIntoView({ behavior: "smooth", block: "nearest" }); } catch (e) {} }, 60);
@@ -548,9 +579,10 @@
       "</div>";
     show(c);
     c.querySelectorAll("a").forEach(function (a) {
-      a.addEventListener("click", function () { track(a.href.indexOf("#contact") > -1 ? "contact_click" : "blog_click", { from: "summary" }); });
+      a.addEventListener("click", function () { var m = a.href.match(/utm_content=([^&#]+)/);
+        track(a.href.indexOf("#contact") > -1 ? "contact_click" : "blog_click", { from: m ? decodeURIComponent(m[1]) : "summary" }); });
     });
-    c.querySelector("#again").addEventListener("click", function () { answers = {}; renderIntro(); });
+    c.querySelector("#again").addEventListener("click", function () { track("restart"); answers = {}; renderIntro(); });
     c.querySelector("#share").addEventListener("click", share);
   }
 
