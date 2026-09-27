@@ -1,0 +1,541 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Empty Nest Check-in</title>
+<meta name="description" content="A short, gentle check-in for parents whose children have left home, from Liane Davids Counselling.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&display=swap" rel="stylesheet">
+<style>
+  /* Brand colours taken from lianedavidscounselling.co.uk */
+  :root {
+    --accent: #8ab4dc;
+    --accent-soft: #dce8f4;
+    --dark-accent: #1463ad;
+    --dark-accent-hover: #0f4f8b;
+    --light-accent: #ebebef;
+    --ink: #1d2733;
+    --ink-soft: #4a5663;
+    --card: #ffffff;
+    --bg: #f5f5f8;
+    --line: #d9dde3;
+    --serif: "Newsreader", Georgia, serif;
+    --sans: "Helvetica Neue", Arial, sans-serif;
+    --radius: 14px;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; }
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: var(--sans);
+    font-size: 17px;
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+  }
+  .app {
+    max-width: 640px;
+    margin: 0 auto;
+    padding: 20px 16px 32px;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+  header.brand {
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 12px; margin-bottom: 18px;
+    font-size: 13px; letter-spacing: .06em; text-transform: uppercase; color: var(--ink-soft);
+  }
+  header.brand a { color: inherit; text-decoration: none; }
+  header.brand a:hover { color: var(--dark-accent); }
+
+  .progress {
+    display: flex; gap: 6px; flex: 1; max-width: 180px;
+  }
+  .progress span {
+    height: 4px; flex: 1; border-radius: 2px; background: var(--line);
+    transition: background .4s ease;
+  }
+  .progress span.done { background: var(--dark-accent); }
+  .progress[hidden] { display: none; }
+
+  .card {
+    background: var(--card);
+    border-radius: var(--radius);
+    box-shadow: 0 1px 2px rgba(20, 40, 60, .06), 0 8px 28px rgba(20, 40, 60, .07);
+    padding: 28px 24px;
+    animation: rise .45s ease both;
+  }
+  @keyframes rise { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+  @media (prefers-reduced-motion: reduce) { .card, .reveal { animation: none !important; } }
+
+  .hero-img {
+    width: calc(100% + 48px); margin: -28px -24px 22px;
+    aspect-ratio: 16 / 8; object-fit: cover; display: block;
+    border-radius: var(--radius) var(--radius) 0 0;
+    background: var(--accent-soft);
+  }
+  .eyebrow {
+    font-size: 13px; letter-spacing: .08em; text-transform: uppercase;
+    color: var(--dark-accent); font-weight: 600; margin: 0 0 8px;
+  }
+  h1, h2 {
+    font-family: var(--serif); font-weight: 500; line-height: 1.2; margin: 0 0 12px;
+    text-wrap: balance;
+  }
+  h1 { font-size: clamp(28px, 6vw, 36px); }
+  h2 { font-size: clamp(23px, 5vw, 28px); }
+  p { margin: 0 0 14px; }
+  .muted { color: var(--ink-soft); }
+  .small { font-size: 14px; }
+
+  .options { display: grid; gap: 10px; margin: 20px 0 4px; }
+  .opt {
+    display: flex; align-items: center; gap: 12px;
+    width: 100%; text-align: left;
+    font: inherit; color: var(--ink);
+    background: var(--card);
+    border: 1.5px solid var(--line); border-radius: 12px;
+    padding: 14px 16px; cursor: pointer;
+    transition: border-color .15s, background .15s, transform .1s;
+  }
+  .opt:hover:not([disabled]) { border-color: var(--accent); background: #fafcfe; }
+  .opt:active:not([disabled]) { transform: scale(.99); }
+  .opt:focus-visible, .btn:focus-visible, .chip:focus-visible, a:focus-visible {
+    outline: 3px solid var(--accent); outline-offset: 2px;
+  }
+  .opt .emoji { font-size: 22px; line-height: 1; flex: none; width: 28px; text-align: center; }
+  .opt[disabled] { cursor: default; opacity: .5; }
+  .opt.chosen { opacity: 1; border-color: var(--dark-accent); background: var(--accent-soft); }
+
+  .chips { display: flex; flex-wrap: wrap; gap: 8px; margin: 18px 0 20px; }
+  .chip {
+    font: inherit; font-size: 15px; color: var(--ink);
+    background: var(--card); border: 1.5px solid var(--line); border-radius: 999px;
+    padding: 8px 14px; cursor: pointer; transition: all .15s;
+  }
+  .chip[aria-pressed="true"] { background: var(--dark-accent); border-color: var(--dark-accent); color: #fff; }
+
+  .reveal {
+    margin-top: 20px; padding: 20px;
+    background: var(--accent-soft); border-radius: 12px;
+    border-left: 4px solid var(--dark-accent);
+    animation: rise .45s ease both;
+  }
+  .reveal h3 { font-family: var(--serif); font-weight: 500; font-size: 21px; margin: 0 0 8px; line-height: 1.25; }
+  .reveal p:last-of-type { margin-bottom: 0; }
+  blockquote {
+    margin: 14px 0 0; padding: 0;
+    font-family: var(--serif); font-style: italic; font-size: 19px; line-height: 1.45; color: var(--ink);
+  }
+  .read-link {
+    display: inline-flex; align-items: center; gap: 6px;
+    margin-top: 14px; font-size: 15px; font-weight: 600;
+    color: var(--dark-accent); text-decoration: none;
+    border-bottom: 1.5px solid currentColor; padding-bottom: 1px;
+  }
+  .read-link:hover { color: var(--dark-accent-hover); }
+
+  .actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 22px; align-items: center; }
+  .btn {
+    display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+    font: inherit; font-weight: 600; font-size: 16px;
+    border-radius: 999px; padding: 13px 24px; cursor: pointer;
+    text-decoration: none; border: 1.5px solid transparent;
+    transition: background .15s, color .15s, border-color .15s;
+  }
+  .btn-primary { background: var(--dark-accent); color: #fff; }
+  .btn-primary:hover { background: var(--dark-accent-hover); }
+  .btn-ghost { background: transparent; color: var(--dark-accent); border-color: var(--dark-accent); }
+  .btn-ghost:hover { background: var(--accent-soft); }
+  .btn-text {
+    background: none; border: none; color: var(--ink-soft); font-weight: 500;
+    padding: 13px 8px; text-decoration: underline; text-underline-offset: 3px;
+  }
+  .btn-block { width: 100%; }
+
+  .summary-list { list-style: none; padding: 0; margin: 18px 0; display: grid; gap: 10px; }
+  .summary-list li {
+    display: flex; gap: 12px; align-items: flex-start;
+    padding: 12px 14px; border: 1px solid var(--line); border-radius: 12px; font-size: 15px;
+  }
+  .summary-list li .emoji { font-size: 20px; line-height: 1.3; }
+  .summary-list a { color: var(--dark-accent); font-weight: 600; }
+
+  .support {
+    margin-top: 22px; padding: 18px 20px; border-radius: 12px; background: var(--light-accent);
+    font-size: 15px;
+  }
+  .support p { margin: 0 0 10px; }
+  .support a { color: var(--dark-accent); font-weight: 600; }
+
+  footer {
+    margin-top: auto; padding-top: 22px; text-align: center; font-size: 13px; color: var(--ink-soft);
+  }
+  footer a { color: inherit; }
+  .toast {
+    position: fixed; left: 50%; bottom: 20px; transform: translateX(-50%);
+    background: var(--ink); color: #fff; padding: 10px 18px; border-radius: 999px; font-size: 14px;
+    opacity: 0; transition: opacity .25s; pointer-events: none;
+  }
+  .toast.show { opacity: 1; }
+  .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+  @media (max-width: 420px) {
+    body { font-size: 16px; }
+    .card { padding: 24px 18px; }
+    .hero-img { width: calc(100% + 36px); margin: -24px -18px 20px; }
+    .btn { width: 100%; }
+  }
+</style>
+</head>
+<body>
+<div class="app">
+  <header class="brand">
+    <a href="https://www.lianedavidscounselling.co.uk" target="_top">Liane Davids Counselling</a>
+    <div class="progress" id="progress" hidden aria-hidden="true"></div>
+  </header>
+
+  <main id="stage" aria-live="polite"></main>
+
+  <footer>
+    This check-in is for reflection only and isn't a diagnosis.<br>
+    © Liane Davids Counselling
+  </footer>
+</div>
+<div class="toast" id="toast" role="status"></div>
+
+<script>
+(function () {
+  // Settings: edit these links if the site changes
+  var BLOG = "https://www.lianedavidscounselling.co.uk/blog/what-happens-once-all-your-children-have-left-home";
+  var CONTACT = "https://www.lianedavidscounselling.co.uk/home#contact";
+  var HERO = "https://static1.squarespace.com/static/69d0e25c6c619b200232f381/6a664adecf427d5cd2120fc4/6ab919d4829ce85d85d9e41b/1790516078610/empty+nest.jpg?format=1000w";
+  var UTM = "utm_source=empty-nest-checkin&utm_medium=interactive&utm_campaign=empty-nest";
+
+  // Links jump to a section of the blog using a text fragment (works in Chrome, Edge and Safari;
+  // other browsers just open the top of the post).
+  function blogLink(content, fragment) {
+    var url = BLOG + "?" + UTM + "&utm_content=" + encodeURIComponent(content);
+    if (fragment) url += "#:~:text=" + encodeURIComponent(fragment);
+    return url;
+  }
+
+  var answers = {};
+  var stage = document.getElementById("stage");
+  var progress = document.getElementById("progress");
+
+  var steps = [
+    {
+      id: "feeling",
+      eyebrow: "Question 1 of 5",
+      title: "Now that your children have left home, which feels closest?",
+      options: [
+        { key: "heartbroken", emoji: "💔", label: "Heartbroken. The house feels far too quiet." },
+        { key: "relieved", emoji: "🌿", label: "Relieved. I have space for myself again." },
+        { key: "both", emoji: "🌗", label: "A bit of both, depending on the day." },
+        { key: "unsure", emoji: "🌫️", label: "Honestly, I'm not sure what I feel." }
+      ],
+      reveal: function (k) {
+        var lead = {
+          heartbroken: "That sense of loss is real, and you're far from alone in feeling it.",
+          relieved: "Feeling relief is completely normal too, and it's nothing to feel guilty about.",
+          both: "You're in good company. This is how most parents describe it.",
+          unsure: "That's okay. Big changes can leave us feeling unsettled before we can name anything."
+        }[k];
+        return {
+          title: lead,
+          body: "For some parents this moment is heartbreaking. For others it brings relief and a chance to pick up parts of life that were put on hold. Most people feel a mix of both.",
+          quote: "There’s no “right” way to react.",
+          link: blogLink("q1-feeling", "no “right” way to react"),
+          linkText: "Read the opening of the blog"
+        };
+      }
+    },
+    {
+      id: "attachment",
+      eyebrow: "Question 2 of 5",
+      title: "Your child hasn't replied to your message for a few days. What's your first instinct?",
+      options: [
+        { key: "secure", emoji: "😌", label: "They're busy. They'll get back to me when they can." },
+        { key: "anxious", emoji: "📱", label: "I start to worry, and I might send another message or two." },
+        { key: "avoidant", emoji: "🧱", label: "I tell myself I don't mind and keep busy." }
+      ],
+      reveal: function (k) {
+        var map = {
+          secure: {
+            title: "That sounds like a secure attachment style",
+            body: "Parents with a secure style often adjust more easily. They can stay close to their child without needing daily contact, and settle into being a parent who isn't needed in the same everyday way.",
+            frag: "Secure attachment"
+          },
+          anxious: {
+            title: "That may point towards an anxious attachment style",
+            body: "Parents with an anxious style can feel this transition more intensely. It can bring feelings of abandonment or worry, along with grief or confusion about who you are now.",
+            frag: "Anxious attachment"
+          },
+          avoidant: {
+            title: "That may point towards an avoidant attachment style",
+            body: "Pulling back emotionally can be a way of protecting yourself from feeling hurt. It can also put quiet strain on relationships, both with a partner and with adult children.",
+            frag: "Avoidant attachment"
+          }
+        }[k];
+        return {
+          title: map.title,
+          body: map.body + " These patterns start early in life and shape how we handle closeness, which is why the empty nest feels so different for everyone.",
+          link: blogLink("q2-attachment-" + k, map.frag),
+          linkText: "Read about all three attachment styles"
+        };
+      }
+    },
+    {
+      id: "grief",
+      eyebrow: "Question 3 of 5",
+      title: "True or false? If you were looking forward to this stage, you shouldn't feel sad about it.",
+      options: [
+        { key: "true", emoji: "✅", label: "True" },
+        { key: "false", emoji: "❌", label: "False" }
+      ],
+      reveal: function (k) {
+        return {
+          title: k === "false" ? "You're right, it's false." : "It's actually false, and that surprises a lot of people.",
+          body: "Even parents who were looking forward to this moment can feel shaken by the quiet, the space or the sudden change in routine. Sadness, guilt, anger, numbness and longing are all common.",
+          quote: "It’s a kind of grief, not because the relationship ends, but because it changes.",
+          link: blogLink("q3-grief", "Why it can feel like grief"),
+          linkText: "Read why it can feel like grief"
+        };
+      }
+    },
+    {
+      id: "close",
+      eyebrow: "Question 4 of 5",
+      title: "Which of these best describes staying close to an adult child?",
+      options: [
+        { key: "daily", emoji: "📞", label: "Checking in every day" },
+        { key: "detail", emoji: "🔍", label: "Knowing what's going on in their life" },
+        { key: "background", emoji: "🏡", label: "Being a steady presence they know they can come to" }
+      ],
+      reveal: function (k) {
+        return {
+          title: k === "background" ? "Exactly. That's the balance the blog describes." : "It's a very natural instinct, but closeness can look different now.",
+          body: "After years of caring, guiding and keeping them safe, it's natural to want to stay involved. Part of this stage is learning to step back a little, even when their choices aren't the ones you'd make.",
+          quote: "You’re still their safe base, just in a different way than before.",
+          link: blogLink("q4-close", "Staying close while letting go"),
+          linkText: "Read “Staying close while letting go”"
+        };
+      }
+    },
+    {
+      id: "self",
+      eyebrow: "Question 5 of 5",
+      title: "If you had more time just for you, what would you make room for?",
+      multi: true,
+      chips: ["Old hobbies", "Friendships", "My partner", "Exercise", "Volunteering", "Learning something new", "Travel", "A slower pace", "Rest", "I don't know yet"],
+      reveal: function (list) {
+        var none = !list.length || (list.length === 1 && list[0] === "I don't know yet");
+        return {
+          title: none ? "Not knowing yet is a perfectly good place to start." : "That sounds like a lovely place to begin.",
+          body: "Many parents realise how much of their identity was wrapped up in raising a family. Once the first wave of emotion settles, “What now?” can be an invitation rather than a worry.",
+          quote: "Not because they stop being parents, but because they finally have room to be more than that.",
+          link: blogLink("q5-self", "Finding yourself again"),
+          linkText: "Read “Finding yourself again”"
+        };
+      }
+    }
+  ];
+
+  function el(tag, attrs, html) {
+    var e = document.createElement(tag);
+    for (var a in attrs || {}) e.setAttribute(a, attrs[a]);
+    if (html != null) e.innerHTML = html;
+    return e;
+  }
+  function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); }
+
+  function track(name, data) {
+    // Sends an event to the parent page (e.g. for analytics) and to Google Analytics if present.
+    try { window.parent && window.parent !== window && window.parent.postMessage({ source: "empty-nest-checkin", event: name, data: data || {} }, "*"); } catch (e) {}
+    try { if (typeof window.gtag === "function") window.gtag("event", name, data || {}); } catch (e) {}
+  }
+
+  function setProgress(i) {
+    progress.hidden = i < 0;
+    progress.innerHTML = "";
+    for (var n = 0; n < steps.length; n++) {
+      progress.appendChild(el("span", { "class": n <= i ? "done" : "" }));
+    }
+  }
+
+  function show(card) {
+    stage.innerHTML = "";
+    stage.appendChild(card);
+    try { window.scrollTo({ top: 0, behavior: "smooth" }); } catch (e) { window.scrollTo(0, 0); }
+    var h = card.querySelector("h1, h2");
+    if (h) { h.setAttribute("tabindex", "-1"); h.focus({ preventScroll: true }); }
+  }
+
+  function renderIntro() {
+    setProgress(-1);
+    var c = el("section", { "class": "card" });
+    c.innerHTML =
+      '<img class="hero-img" src="' + HERO + '" alt="" onerror="this.remove()">' +
+      '<p class="eyebrow">A 2-minute check-in</p>' +
+      '<h1>Has your house gone quiet?</h1>' +
+      '<p>When the children leave home, parents often feel heartbroken, relieved or a confusing mix of both.</p>' +
+      '<p class="muted">Answer five quick questions to see what might be going on for you. Each answer links to the part of our blog that explores it further.</p>' +
+      '<div class="actions">' +
+        '<button class="btn btn-primary" id="start">Start the check-in</button>' +
+        '<a class="btn-text btn" href="' + blogLink("intro-skip") + '" target="_top">Just read the blog</a>' +
+      '</div>';
+    show(c);
+    c.querySelector("#start").addEventListener("click", function () { track("checkin_start"); renderStep(0); });
+    c.querySelector("a.btn-text").addEventListener("click", function () { track("blog_click", { from: "intro" }); });
+  }
+
+  function revealBox(r) {
+    var box = el("div", { "class": "reveal" });
+    box.innerHTML =
+      "<h3>" + esc(r.title) + "</h3>" +
+      "<p>" + esc(r.body) + "</p>" +
+      (r.quote ? "<blockquote>“" + esc(r.quote.replace(/^[“"]|[”"]$/g, "")) + "”</blockquote>" : "") +
+      '<a class="read-link" href="' + r.link + '" target="_top">' + esc(r.linkText) + ' <span aria-hidden="true">→</span></a>';
+    box.querySelector("a").addEventListener("click", function () { track("blog_click", { from: r.linkText }); });
+    return box;
+  }
+
+  function nextButton(i) {
+    var last = i === steps.length - 1;
+    var wrap = el("div", { "class": "actions" });
+    var b = el("button", { "class": "btn btn-primary" }, last ? "See my summary" : "Next question");
+    b.addEventListener("click", function () { last ? renderSummary() : renderStep(i + 1); });
+    wrap.appendChild(b);
+    return wrap;
+  }
+
+  function renderStep(i) {
+    var s = steps[i];
+    setProgress(i);
+    var c = el("section", { "class": "card" });
+    c.appendChild(el("p", { "class": "eyebrow" }, s.eyebrow));
+    c.appendChild(el("h2", null, esc(s.title)));
+
+    if (s.multi) {
+      c.appendChild(el("p", { "class": "muted small" }, "Choose as many as you like."));
+      var chips = el("div", { "class": "chips", role: "group", "aria-label": "Choices" });
+      var picked = [];
+      s.chips.forEach(function (label) {
+        var ch = el("button", { "class": "chip", "aria-pressed": "false", type: "button" }, esc(label));
+        ch.addEventListener("click", function () {
+          var on = ch.getAttribute("aria-pressed") !== "true";
+          ch.setAttribute("aria-pressed", on);
+          if (on) picked.push(label); else picked.splice(picked.indexOf(label), 1);
+        });
+        chips.appendChild(ch);
+      });
+      c.appendChild(chips);
+      var done = el("button", { "class": "btn btn-ghost" }, "That's me");
+      c.appendChild(done);
+      done.addEventListener("click", function () {
+        answers[s.id] = picked.slice();
+        track("checkin_answer", { question: s.id, answer: picked.join(", ") });
+        chips.querySelectorAll(".chip").forEach(function (x) { x.disabled = true; });
+        done.remove();
+        c.appendChild(revealBox(s.reveal(picked)));
+        c.appendChild(nextButton(i));
+      });
+    } else {
+      var opts = el("div", { "class": "options" });
+      s.options.forEach(function (o) {
+        var b = el("button", { "class": "opt", type: "button" },
+          '<span class="emoji" aria-hidden="true">' + o.emoji + "</span><span>" + esc(o.label) + "</span>");
+        b.addEventListener("click", function () {
+          answers[s.id] = o.key;
+          track("checkin_answer", { question: s.id, answer: o.key });
+          opts.querySelectorAll(".opt").forEach(function (x) { x.disabled = true; });
+          b.classList.add("chosen");
+          b.setAttribute("aria-pressed", "true");
+          var r = revealBox(s.reveal(o.key));
+          c.appendChild(r);
+          c.appendChild(nextButton(i));
+          setTimeout(function () { try { r.scrollIntoView({ behavior: "smooth", block: "nearest" }); } catch (e) {} }, 60);
+        });
+        opts.appendChild(b);
+      });
+      c.appendChild(opts);
+    }
+    show(c);
+  }
+
+  function renderSummary() {
+    setProgress(steps.length - 1);
+    track("checkin_complete", answers);
+    var feel = {
+      heartbroken: "You're feeling the loss deeply right now.",
+      relieved: "You're feeling a sense of relief and space.",
+      both: "You're feeling a mix of sadness and relief.",
+      unsure: "You're still working out what you feel."
+    }[answers.feeling];
+    var style = {
+      secure: "You tend to trust the bond when there's distance.",
+      anxious: "Distance can stir up worry for you.",
+      avoidant: "You may protect yourself by pulling back."
+    }[answers.attachment];
+    var room = (answers.self || []).filter(function (x) { return x !== "I don't know yet"; });
+    var roomText = room.length ? "You'd like to make room for: " + room.join(", ").toLowerCase() + "." : "You're still discovering what comes next, and that's fine.";
+
+    var c = el("section", { "class": "card" });
+    c.innerHTML =
+      '<p class="eyebrow">Your check-in</p>' +
+      "<h2>This is a big change, and you're adjusting to it</h2>" +
+      '<ul class="summary-list">' +
+        '<li><span class="emoji" aria-hidden="true">💭</span><span>' + esc(feel) + ' <a href="' + blogLink("summary-feeling", "no “right” way to react") + '" target="_top">Read more</a></span></li>' +
+        '<li><span class="emoji" aria-hidden="true">🔗</span><span>' + esc(style) + ' <a href="' + blogLink("summary-attachment", "Attachment styles") + '" target="_top">Read more</a></span></li>' +
+        '<li><span class="emoji" aria-hidden="true">🌱</span><span>' + esc(roomText) + ' <a href="' + blogLink("summary-self", "Finding yourself again") + '" target="_top">Read more</a></span></li>' +
+      "</ul>" +
+      '<p class="muted">The full blog pulls these ideas together and ends with some gentle, practical ways to live with the change.</p>' +
+      '<a class="btn btn-primary btn-block" href="' + blogLink("summary-cta") + '" target="_top">Read the full blog</a>' +
+      '<div class="support">' +
+        "<p>If this transition feels particularly tough, talking it through with someone can make a real difference.</p>" +
+        '<a href="' + CONTACT + '" target="_top">Get in touch with Liane →</a>' +
+      "</div>" +
+      '<div class="actions">' +
+        '<button class="btn btn-ghost" id="share">Share with a friend</button>' +
+        '<button class="btn btn-text" id="again">Start again</button>' +
+      "</div>";
+    show(c);
+    c.querySelectorAll("a").forEach(function (a) {
+      a.addEventListener("click", function () { track(a.href.indexOf("#contact") > -1 ? "contact_click" : "blog_click", { from: "summary" }); });
+    });
+    c.querySelector("#again").addEventListener("click", function () { answers = {}; renderIntro(); });
+    c.querySelector("#share").addEventListener("click", share);
+  }
+
+  function share() {
+    // Shares the blog itself, so it works however the check-in page is embedded.
+    var url = BLOG + "?utm_source=empty-nest-checkin&utm_medium=share&utm_campaign=empty-nest";
+    var data = { title: "What happens once all your children have left home?", text: "I found this helpful. It might be for you too.", url: url };
+    track("share_click");
+    if (navigator.share) { navigator.share(data).catch(function () {}); return; }
+    var done = function () { toast("Link copied"); };
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(url).then(done, function () { fallbackCopy(url); done(); });
+    } else { fallbackCopy(url); done(); }
+  }
+  function fallbackCopy(t) {
+    var ta = el("textarea"); ta.value = t; ta.style.position = "fixed"; ta.style.opacity = "0";
+    document.body.appendChild(ta); ta.select();
+    try { document.execCommand("copy"); } catch (e) {}
+    ta.remove();
+  }
+  function toast(msg) {
+    var t = document.getElementById("toast");
+    t.textContent = msg; t.classList.add("show");
+    setTimeout(function () { t.classList.remove("show"); }, 1800);
+  }
+
+  renderIntro();
+})();
+</script>
+</body>
+</html>
